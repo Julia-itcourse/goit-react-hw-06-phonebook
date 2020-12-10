@@ -33,14 +33,14 @@ class PhonebookForm extends Component {
     )
     if (sameContact) {
       console.log("same contact exists")
-      // think about this
-      // this.props.notification = true
-      // setTimeout(() => { this.props.notification = false }, 1500)
+      this.setState({ showNotification: true })
+      setTimeout(() => {
+        this.setState({ showNotification: false })
+      }, 1500)
     } else {
       this.props.onAddContact(contact)
+      this.setState({ name: "", number: "" })
     }
-
-    this.setState({ name: "", number: "" })
   }
 
   render() {
@@ -69,9 +69,9 @@ class PhonebookForm extends Component {
         <button className={styles.button} type="submit">
           Add contact
         </button>
-        
+
         <CSSTransition
-          in={this.props.notification}
+          in={this.state.showNotification}
           classNames="notification"
           timeout={250}
           unmountOnExit
