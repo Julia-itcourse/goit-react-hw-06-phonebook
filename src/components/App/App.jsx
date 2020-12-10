@@ -4,9 +4,7 @@ import PhonebookForm from "../PhonebookForm"
 import Filter from "../Filter"
 import Logo from "../Logo"
 import { CSSTransition } from "react-transition-group"
-import {connect} from 'react-redux'
-
-
+import { connect } from "react-redux"
 
 class App extends Component {
   state = {
@@ -14,7 +12,7 @@ class App extends Component {
     filter: "",
     name: "",
     number: "",
-    showNotification: false
+    showNotification: false,
   }
 
   componentDidMount() {
@@ -34,12 +32,13 @@ class App extends Component {
   }
 
   onAddContact = (newContact) => {
+    console.log("App.onAddContact")
     const sameContact = this.state.contacts.find(
       (contact) => contact.name === newContact.name
     )
     if (sameContact) {
-      this.setState({ showNotification: true });
-      setTimeout(() => this.setState({ showNotification: false }), 1500);
+      this.setState({ showNotification: true })
+      setTimeout(() => this.setState({ showNotification: false }), 1500)
     } else {
       this.setState((prevState) => {
         return {
@@ -62,43 +61,45 @@ class App extends Component {
   }
 
   render() {
-    // const filteredContacts = this.state.contacts.filter((contact) =>
-    //   contact.name.toLowerCase().includes(this.state.filter)
-    // )
+    const filteredContacts = this.state.contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(this.state.filter)
+    )
     return (
       <>
-      <CSSTransition in={true} appear = {true} timeout = {500} classNames = "Logo-slideIn">
-        <Logo />
+        <CSSTransition
+          in={true}
+          appear={true}
+          timeout={500}
+          classNames="Logo-slideIn"
+        >
+          <Logo />
         </CSSTransition>
 
         <PhonebookForm />
-        {/* <CSSTransition
-            in={state.contacts.length > 1}
-            timeout={500}
-            classNames={"filter"}
-            unmountOnExit
-          > */}
 
+        <CSSTransition
+          in={this.props.contacts.length > 1}
+          timeout={500}
+          classNames={"filter"}
+          unmountOnExit
+        >
           <Filter />
-          {/* </CSSTransition>
-         */}
-  
-        
-          <ContactList/>
-       
+        </CSSTransition>
+
+        <ContactList />
       </>
     )
   }
 }
 
-// const mapStateToProps = state =>{
-//   return{
-//     items: state.contacts.items
-//   }
-// }
-// export default connect(mapStateToProps)(App)
+const mapStateToProps = (state) => {
+  console.log("App.mapStateToProps")
+  return { contacts: state.contacts }
+}
 
-export default App
+export default connect(mapStateToProps)(App)
+
+// export default App
 
 //*_______________BEFORE_REDUX___________________
 
@@ -108,7 +109,6 @@ export default App
 // import Filter from "../Filter"
 // import Logo from "../Logo"
 // import { CSSTransition } from "react-transition-group"
-
 
 // class App extends Component {
 //   state = {
@@ -186,14 +186,12 @@ export default App
 //             onChangeFilter={this.onChangeFilter}
 //           />
 //           </CSSTransition>
-        
-  
-        
+
 //           <ContactList
 //             contacts={filteredContacts}
 //             onRemoveContact={this.onRemoveContact}
 //           />
-       
+
 //       </>
 //     )
 //   }

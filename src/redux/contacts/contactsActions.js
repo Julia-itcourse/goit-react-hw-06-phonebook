@@ -1,35 +1,36 @@
-import actionTypes from './contactsActionTypes'
-import { v4 as uuidv4 } from 'uuid';
+import actionTypes from "./contactsActionTypes"
+import { v4 as uuidv4 } from "uuid"
 
-const onAddContact = ({name, number, id}) =>({
-type: actionTypes.ADD,
-payload: {
-    newContact:{
+const onAddContact = ({ name, number, id }) => {
+  console.log("contactsActiosn.onAddContact")
+  return {
+    type: actionTypes.ADD,
+    payload: {
+      newContact: {
         name,
         number,
         id,
-    }
-}
-})
-
-
-const onRemoveContact = (contactId) =>({
-    type: actionTypes.REMOVE,
-    payload: {
-        contactId,
+      },
     },
-})
+  }
+}
 
+const onRemoveContact = (contactId) => ({
+  type: actionTypes.REMOVE,
+  payload: {
+    contactId,
+  },
+})
 
 const onChangeFilter = (filter) => ({
-    type: actionTypes.CHANGE_FILTER,
-    payload: {
-        filter,
-    },
+  type: actionTypes.CHANGE_FILTER,
+  payload: {
+    filter,
+  },
 })
 
 export default {
-    onAddContact,
-    onRemoveContact,
-    onChangeFilter
+  onAddContact,
+  onRemoveContact,
+  onChangeFilter,
 }

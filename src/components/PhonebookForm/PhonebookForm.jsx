@@ -1,16 +1,16 @@
 import React, { Component } from "react"
 import styles from "./PhonebookForm.module.css"
 import { v4 as uuidv4 } from "uuid"
-import {CSSTransition} from 'react-transition-group'
-import './notification.css'
-import {connect} from 'react-redux'
-import contactsActions from '../../redux/contacts/contactsActions'
-
+import { CSSTransition } from "react-transition-group"
+import "./notification.css"
+import { connect } from "react-redux"
+import contactsActions from "../../redux/contacts/contactsActions"
 
 class PhonebookForm extends Component {
   state = {
     name: "",
     number: "",
+    showNotification: false,
   }
 
   handleChange = ({ target: { value, name } }) => {
@@ -25,7 +25,21 @@ class PhonebookForm extends Component {
       number: this.state.number,
     }
 
-    this.props.onAddContact(contact)
+    console.log("PhonebookForm.handleSubmit")
+    console.dir(this.props.contacts)
+
+    const sameContact = this.props.contacts.items.find(
+      (existingContact) => existingContact.name === contact.name
+    )
+    if (sameContact) {
+      console.log("same contact exists")
+      // think about this
+      // this.props.notification = true
+      // setTimeout(() => { this.props.notification = false }, 1500)
+    } else {
+      this.props.onAddContact(contact)
+    }
+
     this.setState({ name: "", number: "" })
   }
 
@@ -55,6 +69,7 @@ class PhonebookForm extends Component {
         <button className={styles.button} type="submit">
           Add contact
         </button>
+        
         <CSSTransition
           in={this.props.notification}
           classNames="notification"
@@ -68,8 +83,12 @@ class PhonebookForm extends Component {
   }
 }
 
-const mapDispatchToProps = {
-  onAddContact: contactsActions.onAddContact
+const mapStateToProps = (state) => {
+  return { contacts: state.contacts }
 }
 
-export default connect(null, mapDispatchToProps)(PhonebookForm)
+const mapDispatchToProps = {
+  onAddContact: contactsActions.onAddContact,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PhonebookForm)
