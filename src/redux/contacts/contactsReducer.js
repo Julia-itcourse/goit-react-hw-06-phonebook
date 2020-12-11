@@ -1,23 +1,17 @@
 import { combineReducers } from "redux"
-import actionTypes from "./contactsActionTypes"
+import contactsActions from './contactsActions'
 
-//?State
-// {
-//     contacts: {
-//       items: [],
-//       filter: ''
-//     }
-//   }
+
 
 const items = (state = [], { type, payload }) => {
   console.log("contactsReducer.items")
   switch (type) {
-    case actionTypes.ADD:
+    case contactsActions.onAddContact.type:
       console.log(payload.newContact)
       return [...state, payload.newContact]
 
-    case actionTypes.REMOVE:
-      return state.filter((contact) => contact.id !== payload.contactId)
+    case contactsActions.onRemoveContact.type:
+      return state.filter((contact) => contact.id !== payload)
 
     default:
       return state
@@ -27,8 +21,8 @@ const items = (state = [], { type, payload }) => {
 const filter = (state = "", { type, payload }) => {
   console.log("contactsReducer.filter")
   switch (type) {
-    case actionTypes.CHANGE_FILTER:
-      return payload.filter
+    case contactsActions.onChangeFilter.type:
+      return payload
 
     default:
       return state
@@ -39,3 +33,41 @@ export default combineReducers({
   items,
   filter,
 })
+
+
+// *______________________BEFORE TOOLKIT__________________________
+
+// import { combineReducers } from "redux"
+// import actionTypes from "./contactsActionTypes"
+
+
+// const items = (state = [], { type, payload }) => {
+//   console.log("contactsReducer.items")
+//   switch (type) {
+//     case actionTypes.ADD:
+//       console.log(payload.newContact)
+//       return [...state, payload.newContact]
+
+//     case actionTypes.REMOVE:
+//       return state.filter((contact) => contact.id !== payload.contactId)
+
+//     default:
+//       return state
+//   }
+// }
+
+// const filter = (state = "", { type, payload }) => {
+//   console.log("contactsReducer.filter")
+//   switch (type) {
+//     case actionTypes.CHANGE_FILTER:
+//       return payload.filter
+
+//     default:
+//       return state
+//   }
+// }
+
+// export default combineReducers({
+//   items,
+//   filter,
+// })
