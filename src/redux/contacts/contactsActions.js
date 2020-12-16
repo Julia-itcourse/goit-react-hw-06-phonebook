@@ -13,26 +13,18 @@ const onAddContact = createAction("contact/add", ({ name, number, id }) => ({
 
 const onRemoveContact = createAction('contact/remove');
 
-// const onRemoveContact = (contactId) => ({
-//   type: actionTypes.REMOVE,
-//   payload: {
-//     contactId,
-//   },
-// })
 
 const onChangeFilter = createAction('contact/filter')
 
-// const onChangeFilter = (filter) => ({
-//   type: actionTypes.CHANGE_FILTER,
-//   payload: {
-//     filter,
-//   },
-// })
+
+const onSaveContact = createAction('contacts/save')
+
 
 export default {
   onAddContact,
   onRemoveContact,
   onChangeFilter,
+  onSaveContact,
 }
 
 //*_______________BEFORE TOOLKIT___________________________________

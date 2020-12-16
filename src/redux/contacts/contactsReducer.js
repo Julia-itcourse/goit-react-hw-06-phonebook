@@ -10,9 +10,14 @@ const handleRemove = (state, action) =>{
     return state.filter((contact) => contact.id !== action.payload)
 }
 
+const handleSave = (state, action) => {
+   return (localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')) : state)
+}
+
 const items = createReducer([], {
     [contactsActions.onAddContact]: handleAdd,
     [contactsActions.onRemoveContact]: handleRemove,
+    [contactsActions.onSaveContact]: handleSave,
 })
 
 const filter = createReducer('', {
