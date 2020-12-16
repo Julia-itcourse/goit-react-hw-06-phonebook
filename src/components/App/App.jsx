@@ -7,9 +7,7 @@ import { CSSTransition } from "react-transition-group"
 import { connect } from "react-redux"
 
 class App extends Component {
-  state = {
-    showNotification: false,
-  }
+
 
   render() {
     return (
