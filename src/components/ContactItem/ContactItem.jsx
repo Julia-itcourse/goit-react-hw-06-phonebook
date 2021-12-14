@@ -2,10 +2,11 @@ import React from "react";
 import styles from "./ContactItem.module.css";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
+import contactsActions from "../../redux/contacts/contactsActions";
 
-const ContactItem = ({ contact, onRemoveContact }) => {
+const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
-  const removeItem = (id) => dispatch(onRemoveContact(id));
+  const removeItem = (id) => dispatch(contactsActions.onRemoveContact(id));
 
   return (
     <li className={styles.item}>

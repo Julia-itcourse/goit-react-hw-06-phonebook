@@ -16,9 +16,18 @@ const onChangeFilter = createAction("contact/filter");
 
 const onSaveContact = createAction("contacts/save");
 
-export default {
+const contactsActions = {
   onAddContact,
   onRemoveContact,
   onChangeFilter,
   onSaveContact,
 };
+
+export default contactsActions;
+
+// export default {
+//   onAddContact,
+//   onRemoveContact,
+//   onChangeFilter,
+//   onSaveContact,
+// };
