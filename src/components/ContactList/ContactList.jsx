@@ -14,7 +14,7 @@ class ContactList extends Component {
   }
 
 componentDidUpdate(prevProps, prevState){
-  return (this.props.contacts?localStorage.setItem('contacts', JSON.stringify(this.props.contacts)):[])
+  return (this.props.contacts ? localStorage.setItem('contacts', JSON.stringify(this.props.contacts)):[])
 }
 
 render(){
