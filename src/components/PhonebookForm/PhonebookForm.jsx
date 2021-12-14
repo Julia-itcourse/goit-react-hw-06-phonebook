@@ -1,94 +1,92 @@
-import React, { Component } from "react"
-import styles from "./PhonebookForm.module.css"
-import { v4 as uuidv4 } from "uuid"
-import { CSSTransition } from "react-transition-group"
-import "./notification.css"
-import { connect } from "react-redux"
-import contactsActions from "../../redux/contacts/contactsActions"
+import styles from "./PhonebookForm.module.css";
+import { v4 as uuidv4 } from "uuid";
+import { CSSTransition } from "react-transition-group";
+import "./notification.css";
 
-class PhonebookForm extends Component {
-  state = {
-    name: "",
-    number: "",
-    showNotification: false,
-  }
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import contactsActions from "../../redux/contacts/contactsActions";
+import { getContacts } from "../../redux/contacts/contactsSelectors";
 
-  handleChange = ({ target: { value, name } }) => {
-    this.setState({ [name]: value })
-  }
+const PhonebookForm = () => {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
 
-  handleSubmit = (event) => {
-    event.preventDefault()
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+  const onAddContact = (contact) => {
+    dispatch(contactsActions.onAddContact(contact));
+  };
+
+  const changeName = (event) => {
+    setName(event.target.value);
+  };
+  const changeNumber = (event) => {
+    setNumber(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
     const contact = {
       id: uuidv4(),
-      name: this.state.name,
-      number: this.state.number,
-    }
+      name,
+      number,
+    };
 
-    console.log("PhonebookForm.handleSubmit")
-    console.dir(this.props.contacts)
+    const sameContact = contacts.find(
+      (existingContact) => existingContact.name === contact.name,
+    );
 
-    const sameContact = this.props.contacts.items.find(
-      (existingContact) => existingContact.name === contact.name
-    )
     if (sameContact) {
-      console.log("same contact exists")
-      this.setState({ showNotification: true })
+      console.log("same contact exists");
+      setShowNotification(true);
+
       setTimeout(() => {
-        this.setState({ showNotification: false })
-      }, 1500)
+        setShowNotification(false);
+      }, 1500);
     } else {
-      this.props.onAddContact(contact)
-      this.setState({ name: "", number: "" })
+      onAddContact(contact);
+      setName("");
+      setNumber("");
     }
-  }
+  };
+  return (
+    <form onSubmit={handleSubmit} className={styles.form__group}>
+      <input
+        className={styles.form__input}
+        name="name"
+        type="text"
+        value={name}
+        onChange={changeName}
+        placeholder="Name"
+        required
+      />
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className={styles.form__group}>
-        <input
-          className={styles.form__input}
-          name="name"
-          type="text"
-          value={this.state.name}
-          onChange={this.handleChange}
-          placeholder="Name"
-          required
-        />
+      <input
+        className={styles.form__input}
+        name="number"
+        type="text"
+        value={number}
+        onChange={changeNumber}
+        placeholder="Phone number"
+        required
+      />
 
-        <input
-          className={styles.form__input}
-          name="number"
-          type="text"
-          value={this.state.number}
-          onChange={this.handleChange}
-          placeholder="Phone number"
-          required
-        />
+      <button className={styles.button} type="submit">
+        Add contact
+      </button>
 
-        <button className={styles.button} type="submit">
-          Add contact
-        </button>
+      <CSSTransition
+        in={showNotification}
+        classNames="notification"
+        timeout={250}
+        unmountOnExit
+      >
+        <div className={styles.notification}>Contact already exists!</div>
+      </CSSTransition>
+    </form>
+  );
+};
 
-        <CSSTransition
-          in={this.state.showNotification}
-          classNames="notification"
-          timeout={250}
-          unmountOnExit
-        >
-          <div className={styles.notification}>Contact already exists!</div>
-        </CSSTransition>
-      </form>
-    )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return { contacts: state.contacts }
-}
-
-const mapDispatchToProps = {
-  onAddContact: contactsActions.onAddContact,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PhonebookForm)
+export default PhonebookForm;

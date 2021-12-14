@@ -1,53 +1,35 @@
-import React, {Component} from "react"
-import ContactItem from "../ContactItem"
-import PropTypes, { arrayOf } from "prop-types"
-import { CSSTransition, TransitionGroup } from "react-transition-group"
-import "./ContactList.css"
-import { connect } from "react-redux"
-import contactsActions from "../../redux/contacts/contactsActions"
+import { useEffect } from "react";
+import ContactItem from "../ContactItem";
 
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "./ContactList.css";
 
-class ContactList extends Component {
+import { useSelector, useDispatch } from "react-redux";
+import contactsActions from "../../redux/contacts/contactsActions";
+import { getVisibleContacts } from "../../redux/contacts/contactsSelectors";
 
-  componentDidMount(){
-    this.props.onSaveContact()
-  }
+const ContactList = () => {
+  const dispatch = useDispatch();
+  const saveContact = () => dispatch(contactsActions.onSaveContact);
+  const visibleContacts = useSelector(getVisibleContacts);
 
-componentDidUpdate(prevProps, prevState){
-  return (this.props.contacts ? localStorage.setItem('contacts', JSON.stringify(this.props.contacts)):[])
-}
+  useEffect(() => {
+    saveContact();
+  }, []);
 
-render(){
   return (
     <TransitionGroup component="ul" className="ContactList">
-      {this.props.contacts.map((item) => (
+      {visibleContacts.map((item) => (
         <CSSTransition
           key={item.id}
           timeout={250}
           classNames="ContactList-item-slide"
         >
-          <ContactItem
-            contact={item}
-            onRemoveContact={() => this.props.onRemoveContact(item.id)}
-          />
+          <ContactItem contact={item} />
         </CSSTransition>
       ))}
     </TransitionGroup>
-  )
-}
+  );
+};
 
-}
-const mapStateToProps = (state) => {
-  const { items, filter } = state.contacts
-  const filteredContacts = items.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  )
-
-  return { contacts: filteredContacts }
-}
-
-const mapDispatchToProps = {
-  onRemoveContact: contactsActions.onRemoveContact,
-  onSaveContact: contactsActions.onSaveContact
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList)
+export default ContactList;

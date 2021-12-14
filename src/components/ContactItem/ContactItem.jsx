@@ -8,15 +8,16 @@ const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
   const removeItem = (id) => dispatch(contactsActions.onRemoveContact(id));
 
+  const { name, number, id } = contact;
   return (
     <li className={styles.item}>
       <span className={styles.text}>
-        {contact.name}: {contact.number}
+        {name}: {number}
       </span>
       <button
         className={styles.button}
         type="button"
-        onClick={() => removeItem(contact.id)}
+        onClick={() => removeItem(id)}
       >
         Remove
       </button>
